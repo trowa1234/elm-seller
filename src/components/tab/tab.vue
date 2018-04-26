@@ -24,6 +24,7 @@ export default {};
   line-height: 40px;
   .tab-item{
     flex: 1;
+    .font-dpr(14px);
     text-align: center;
     &.router-link-active{
       color: red;

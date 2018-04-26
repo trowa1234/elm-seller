@@ -10,4 +10,7 @@ export default {};
 
 <style scoped lang="less">
 @import "../../common/less/main.less";
+.m-header{
+  .font-dpr(16px);
+}
 </style>
