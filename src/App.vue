@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <m-header></m-header>
+    <m-header :seller="sellerData"></m-header>
     <tab></tab>
     <router-view/>
   </div>
@@ -12,6 +12,11 @@ import Tab from "@/components/tab/tab";
 import { getSellerData } from "@/api/api";
 export default {
   name: "App",
+  data(){
+    return{
+      sellerData:{}
+    }
+  },
   created() {
     this._getSellerData();
   },
@@ -19,7 +24,8 @@ export default {
     _getSellerData() {
       getSellerData().then(res => {
         if (res.code == 0) {
-          console.log(res);
+          this.sellerData = res.data;
+          console.log(this.sellerData);
         }
       });
     }
