@@ -11,6 +11,19 @@
         <p class="seller-supports" v-if="seller.supports">
           <span class="supports-ico" :class="supportsIco[seller.supports[0].type]"></span>{{seller.supports[0].description}}</p>
       </div>
+      <div class="supports-btn" v-if="seller.supports">
+        {{seller.supports.length}}个
+        <i class="iconfont icon-enter"></i>
+      </div>
+    </div>
+    <div class="bulletin-wrapper">
+      <div class="bulletin">
+        <i class="bulletin-icon"></i>
+        <span class="bulletin-text">{{seller.bulletin}}</span>
+      </div>
+      <i class="iconfont icon-enter"></i>
+    </div>
+    <div class="background-wrapper" :style="{backgroundImage:'url(' + seller.avatar +')'}">
     </div>
   </div>
 </template>
@@ -25,7 +38,7 @@ export default {
   },
   data() {
     return {
-      supportsIco:['des01','des02','des03','des04','des05']
+      supportsIco: ["des01", "des02", "des03", "des04", "des05"]
     };
   }
 };
@@ -33,14 +46,15 @@ export default {
 <style scoped lang="less">
 @import "../../common/less/main.less";
 .m-header {
-  width: 100%;
-  height: 3.5733rem;
-  background-color: #333;
-  padding-left: 0.64rem;
-  padding-top: 0.64rem;
-  box-sizing: border-box;
+  position: relative;
   color: #fff;
-  font-size: 0;
+  background: rgba(7, 17, 27, 0.5);
+      overflow: hidden;
+  .content-wrapper {
+    padding-left: 0.64rem;
+    padding-top: 0.64rem;
+    position: relative;
+  }
   .avatar {
     display: inline-block;
     vertical-align: top;
@@ -100,6 +114,64 @@ export default {
         }
       }
     }
+  }
+  .supports-btn {
+    position: absolute;
+    padding: 0 0.2133rem;
+    height: 0.64rem;
+    line-height: 0.64rem;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 24px;
+    right: 0.32rem;
+    bottom: 0;
+    color: #fff;
+    .font-dpr(12px);
+    .icon-enter {
+      .font-dpr(10px);
+      margin-left: 0.1333rem;
+    }
+  }
+
+  .bulletin-wrapper {
+    position: relative;
+    margin-top: 0.48rem;
+    line-height: 0.7467rem;
+    height: 0.7467rem;
+    background: rgba(7, 17, 27, 0.2);
+    padding: 0 0.4rem;
+    .bulletin {
+      .font-dpr(12px);
+      .text-overflow();
+      color: #fff;
+      .bulletin-icon {
+        width: 0.5867rem;
+        height: 0.32rem;
+        display: inline-block;
+        background: url("bulletin@3x.png") no-repeat;
+        background-size: 0.5867rem 0.32rem;
+        vertical-align: top;
+        margin-top: 0.21rem;
+        margin-right: 0.1067rem;
+      }
+    }
+    .icon-enter {
+      position: absolute;
+      right: 0.1333rem;
+      bottom: 0;
+      .font-dpr(10px);
+      color: #fff;
+    }
+  }
+  .background-wrapper {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: -1;
+    left: 0;
+    top: 0;
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
+    filter: blur(18px);
   }
 }
 </style>
