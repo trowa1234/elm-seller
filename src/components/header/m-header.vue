@@ -11,12 +11,12 @@
         <p class="seller-supports" v-if="seller.supports">
           <span class="supports-ico" :class="supportsIco[seller.supports[0].type]"></span>{{seller.supports[0].description}}</p>
       </div>
-      <div class="supports-btn" v-if="seller.supports">
+      <div class="supports-btn" v-if="seller.supports" @click="showDetail">
         {{seller.supports.length}}个
         <i class="iconfont icon-enter"></i>
       </div>
     </div>
-    <div class="bulletin-wrapper">
+    <div class="bulletin-wrapper" @click="showDetail">
       <div class="bulletin">
         <i class="bulletin-icon"></i>
         <span class="bulletin-text">{{seller.bulletin}}</span>
@@ -25,10 +25,24 @@
     </div>
     <div class="background-wrapper" :style="{backgroundImage:'url(' + seller.avatar +')'}">
     </div>
+    <div class="detail" v-show="detailShow">
+      <div class="detail-wrapper">
+        <div class="detail-main">
+          <h1 class="title">{{seller.name}}</h1>
+          <div class="star-wrapper">
+            <star :size="size" :score="seller.score"></star>
+          </div>
+        </div>
+      </div>
+      <div class="detail-close">
+        <i class="iconfont icon-close" @click="closeDetail"></i>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import Star from "@/components/star/star";
 export default {
   props: {
     seller: {
@@ -38,8 +52,21 @@ export default {
   },
   data() {
     return {
-      supportsIco: ["des01", "des02", "des03", "des04", "des05"]
+      supportsIco: ["des01", "des02", "des03", "des04", "des05"],
+      detailShow: false,
+      size: "big"
     };
+  },
+  methods: {
+    showDetail() {
+      this.detailShow = true;
+    },
+    closeDetail() {
+      this.detailShow = false;
+    }
+  },
+  components: {
+    Star
   }
 };
 </script>
@@ -49,7 +76,7 @@ export default {
   position: relative;
   color: #fff;
   background: rgba(7, 17, 27, 0.5);
-      overflow: hidden;
+  overflow: hidden;
   .content-wrapper {
     padding-left: 0.64rem;
     padding-top: 0.64rem;
@@ -172,6 +199,43 @@ export default {
     background-repeat: no-repeat;
     background-size: 100% 100%;
     filter: blur(18px);
+  }
+  .detail {
+    width: 100%;
+    height: 100%;
+    z-index: 100;
+    overflow: auto;
+    background: rgba(7, 17, 27, 0.8);
+    position: fixed;
+    left: 0;
+    top: 0;
+    .detail-wrapper {
+      min-height: 100%;
+      .clearfix();
+      .detail-main {
+        width: 100%;
+        margin-top: 1.7067rem;
+        padding-bottom: 1.7067rem;
+        .title {
+          .font-dpr(24px);
+          font-weight: 700;
+          text-align: center;
+        }
+        .star-wrapper{
+          text-align: center;
+          margin-top: 0.4267rem;
+        }
+      }
+    }
+    .detail-close {
+      position: relative;
+      margin: -1.7067rem auto 0 auto;
+      text-align: center;
+      .icon-close {
+        .font-dpr(24px);
+        color: #8f9297;
+      }
+    }
   }
 }
 </style>
