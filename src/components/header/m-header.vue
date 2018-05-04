@@ -25,19 +25,42 @@
     </div>
     <div class="background-wrapper" :style="{backgroundImage:'url(' + seller.avatar +')'}">
     </div>
-    <div class="detail" v-show="detailShow">
-      <div class="detail-wrapper">
-        <div class="detail-main">
-          <h1 class="title">{{seller.name}}</h1>
-          <div class="star-wrapper">
-            <star :size="size" :score="seller.score"></star>
+    <transition name="slide">
+      <div class="detail" v-show="detailShow">
+        <div class="detail-wrapper">
+          <div class="detail-main">
+            <h1 class="title">{{seller.name}}</h1>
+            <div class="star-wrapper">
+              <star :size="size" :score="seller.score"></star>
+            </div>
+            <div class="title-item">
+              <div class="line"></div>
+              <div class="title-text">优惠信息</div>
+              <div class="line"></div>
+            </div>
+            <div class="supports-item">
+              <ul>
+                <li v-for="(item,index) in seller.supports" :key="index">
+                  <i class="supports-ico" :class="supportsIco[seller.supports[index].type]"></i>
+                  <span class="supports-text">{{seller.supports[index].description}}</span>
+                </li>
+              </ul>
+            </div>
+            <div class="title-item">
+              <div class="line"></div>
+              <div class="title-text">商家信息</div>
+              <div class="line"></div>
+            </div>
+            <div class="sellerinfo-item">
+              <p class="seller-info">{{seller.bulletin}}</p>
+            </div>
           </div>
         </div>
+        <div class="detail-close">
+          <i class="iconfont icon-close" @click="closeDetail"></i>
+        </div>
       </div>
-      <div class="detail-close">
-        <i class="iconfont icon-close" @click="closeDetail"></i>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -217,13 +240,76 @@ export default {
         margin-top: 1.7067rem;
         padding-bottom: 1.7067rem;
         .title {
-          .font-dpr(24px);
+          .font-dpr(22px);
           font-weight: 700;
           text-align: center;
         }
-        .star-wrapper{
+        .star-wrapper {
           text-align: center;
           margin-top: 0.4267rem;
+        }
+        .title-item {
+          width: 90%;
+          display: flex;
+          margin: 0.7467rem auto 0 auto;
+          .line {
+            flex: 1;
+            border-bottom: 0.0267rem solid #5c6269;
+            top: -0.32rem;
+            position: relative;
+          }
+          .title-text {
+            .font-dpr(20px);
+            font-weight: 700;
+            padding: 0 0.32rem;
+          }
+        }
+        .supports-item {
+          width: 86%;
+          margin: 0 auto;
+          padding-top: 0.64rem;
+          li {
+            margin-bottom: 0.32rem;
+            width: 100%;
+            .text-overflow()
+          }
+          .supports-ico {
+            width: 0.48rem;
+            height: 0.48rem;
+            display: inline-block;
+            background-repeat: no-repeat;
+            background-size: 0.48rem 0.48rem;
+            vertical-align: top;
+            margin-right: 0.16rem;
+            &.des01 {
+              background-image: url("decrease_2@3x.png");
+            }
+            &.des02 {
+              background-image: url("discount_2@3x.png");
+            }
+            &.des03 {
+              background-image: url("special_2@3x.png");
+            }
+            &.des04 {
+              background-image: url("invoice_2@3x.png");
+            }
+            &.des05 {
+              background-image: url("guarantee_2@3x.png");
+            }
+          }
+          .supports-text {
+            line-height: 0.48rem;
+            .font-dpr(14px);
+          }
+        }
+        .sellerinfo-item {
+          width: 86%;
+          margin: 0 auto;
+          padding-top: 0.64rem;
+          .seller-info {
+            line-height: 0.64rem;
+            .font-dpr(14px);
+          }
         }
       }
     }
@@ -237,5 +323,15 @@ export default {
       }
     }
   }
+}
+
+//页面切换动画样式
+.slide-enter-active,
+.slide-leave-active {
+    transition: all 0.3s ease;
+}
+.slide-enter,
+.slide-leave-to {
+    transform: translate3d(100%, 0, 0);
 }
 </style>

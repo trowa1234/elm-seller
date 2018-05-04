@@ -20,11 +20,13 @@ export default {};
 @import "../../common/less/main.less";
 .tab {
   display: flex;
-  height: 40px;
-  line-height: 40px;
+  height: 1.0667rem;
+  border-bottom: 0.0133rem solid #e5e5e5;
   .tab-item{
     flex: 1;
     .font-dpr(14px);
+    color: #222;
+    line-height: 1.0667rem;
     text-align: center;
     &.router-link-active{
       color: red;
