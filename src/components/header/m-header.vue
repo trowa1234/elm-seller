@@ -9,7 +9,9 @@
           <span class="tag">品牌</span>{{seller.name}}</p>
         <p class="seller-dispatching">{{seller.description}} / {{seller.deliveryTime}}分钟送达</p>
         <p class="seller-supports" v-if="seller.supports">
-          <span class="supports-ico" :class="supportsIco[seller.supports[0].type]"></span>{{seller.supports[0].description}}</p>
+          <supports-ico class="supportsico" :icotype="seller.supports[0].type"></supports-ico>
+          {{seller.supports[0].description}}
+        </p>
       </div>
       <div class="supports-btn" v-if="seller.supports" @click="showDetail">
         {{seller.supports.length}}个
@@ -41,7 +43,7 @@
             <div class="supports-item">
               <ul>
                 <li v-for="(item,index) in seller.supports" :key="index">
-                  <i class="supports-ico" :class="supportsIco[seller.supports[index].type]"></i>
+                  <supports-ico class="supportsico" :icotype="seller.supports[index].type"></supports-ico>
                   <span class="supports-text">{{seller.supports[index].description}}</span>
                 </li>
               </ul>
@@ -66,6 +68,7 @@
 
 <script>
 import Star from "@/components/star/star";
+import supportsIco from "@/components/supports-ico/supports-ico";
 export default {
   props: {
     seller: {
@@ -89,7 +92,8 @@ export default {
     }
   },
   components: {
-    Star
+    Star,
+    supportsIco
   }
 };
 </script>
@@ -100,6 +104,7 @@ export default {
   color: #fff;
   background: rgba(7, 17, 27, 0.5);
   overflow: hidden;
+  height: 3.56rem;
   .content-wrapper {
     padding-left: 0.64rem;
     padding-top: 0.64rem;
@@ -139,29 +144,10 @@ export default {
     .seller-supports {
       .font-dpr(12px);
       margin-top: 0.16rem;
-      .supports-ico {
+      .supportsico{
         width: 0.4rem;
         height: 0.4rem;
-        display: inline-block;
-        background-repeat: no-repeat;
-        background-size: 0.4rem 0.4rem;
-        vertical-align: top;
-        margin-right: 0.2133rem;
-        &.des01 {
-          background-image: url("decrease_2@3x.png");
-        }
-        &.des02 {
-          background-image: url("discount_2@3x.png");
-        }
-        &.des03 {
-          background-image: url("special_2@3x.png");
-        }
-        &.des04 {
-          background-image: url("invoice_2@3x.png");
-        }
-        &.des05 {
-          background-image: url("guarantee_2@3x.png");
-        }
+        margin-right: 0.1067rem;
       }
     }
   }
@@ -184,7 +170,7 @@ export default {
 
   .bulletin-wrapper {
     position: relative;
-    margin-top: 0.48rem;
+    margin-top: 0.4rem;
     line-height: 0.7467rem;
     height: 0.7467rem;
     background: rgba(7, 17, 27, 0.2);
@@ -271,31 +257,12 @@ export default {
           li {
             margin-bottom: 0.32rem;
             width: 100%;
-            .text-overflow()
+            .text-overflow();
           }
-          .supports-ico {
+          .supportsico {
             width: 0.48rem;
             height: 0.48rem;
-            display: inline-block;
-            background-repeat: no-repeat;
-            background-size: 0.48rem 0.48rem;
-            vertical-align: top;
             margin-right: 0.16rem;
-            &.des01 {
-              background-image: url("decrease_2@3x.png");
-            }
-            &.des02 {
-              background-image: url("discount_2@3x.png");
-            }
-            &.des03 {
-              background-image: url("special_2@3x.png");
-            }
-            &.des04 {
-              background-image: url("invoice_2@3x.png");
-            }
-            &.des05 {
-              background-image: url("guarantee_2@3x.png");
-            }
           }
           .supports-text {
             line-height: 0.48rem;
@@ -328,10 +295,10 @@ export default {
 //页面切换动画样式
 .slide-enter-active,
 .slide-leave-active {
-    transition: all 0.3s ease;
+  transition: all 0.3s ease;
 }
 .slide-enter,
 .slide-leave-to {
-    transform: translate3d(100%, 0, 0);
+  transform: translate3d(100%, 0, 0);
 }
 </style>

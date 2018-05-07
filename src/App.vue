@@ -25,7 +25,6 @@ export default {
       getSellerData().then(res => {
         if (res.code == 0) {
           this.sellerData = res.data;
-          console.log(this.sellerData);
         }
       });
     }
