@@ -3,6 +3,7 @@ import vueResource from "vue-resource"
 
 Vue.use(vueResource);
 
+//商家数据
 export function getSellerData(){
   const url = '/api/seller';
 
@@ -11,7 +12,7 @@ export function getSellerData(){
   })
 }
 
-
+//商品数据
 export function getGoodsData(){
   const url = '/api/goods';
 
