@@ -2,8 +2,11 @@
   <div class="goods">
     <div class="menu-wrapper" ref="menuscroll">
       <ul>
-        <li v-for="(item,index) in GoodsData" :key="index" class="menu-item">
-
+        <!-- 绑定class，当当前索引值index等于计算属性中的currentIndex时，给这个li标签添加current这个样式名 -->
+        <li v-for="(item,index) in GoodsData" 
+            :key="index" class="menu-item" 
+            :class="{'current':currentIndex===index}" 
+            @click="selectMenu(index)">
           <span class="menu-text">
             <!-- 数据中type值为-1表示没有图标显示。所以当type值大于0时才显示图标 -->
             <supports-ico v-if="item.type>0" class="supportsico" :icotype="item.type" :icoStyle="1"></supports-ico>{{item.name}}</span>
@@ -12,7 +15,7 @@
     </div>
     <div class="goods-wrapper" ref="goodsscroll">
       <ul>
-        <li v-for="(item,index) in GoodsData" :key="index" class="food-list">
+        <li v-for="(item,index) in GoodsData" :key="index" class="food-list food-list-hook">
           <h1 class="title">{{item.name}}</h1>
           <ul>
             <li v-for="(food,index) in item.foods" :key="index" class="food-item">
@@ -36,27 +39,58 @@
         </li>
       </ul>
     </div>
+    <!-- 送餐费和起送价格都是通过父级数据传递过来，在购物车组件中通过props获取 -->
+    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script>
 import { getGoodsData } from "@/api/api";
 import supportsIco from "@/components/supports-ico/supports-ico";
+import shopcart from "@/components/shopcart/shopcart";
 import BScroll from "better-scroll";
 
 export default {
+  props:{
+    seller:{
+      type:Object,
+      default:{}
+    }
+  },
   data() {
     return {
-      GoodsData: []
+      GoodsData: [],  //接收商品数据
+      listHeight:[],   //存储每组商品的高度,实现滚动到相应位置左边菜单高亮
+      scrollY:0       //定义变量存放滚动条滚动的Y值
     };
+  },
+  computed:{
+    //根据Y值和高度数组比较，落在哪个区间，那个区间就高亮显示
+    //获取落在哪个区间
+    currentIndex(){
+      for(let i = 0; i<this.listHeight.length; i++){
+        let height1 = this.listHeight[i]; //获取当前项高度
+        let height2 = this.listHeight[i+1];//获取下一项高度，从而得到1个区间
+
+        //当Y值大于等于当前高度，小于下一项高度时说明落在了这个区间，就返回这个区间。i就是这个区间
+        //当height2为undefined是因为到了最后1项了，所以返回的就是最后1个区间
+        if(!height2 || (this.scrollY >= height1 && this.scrollY < height2)){
+          return i
+        }
+      }
+      return 0 //默认返回0，第1个区间
+    }
   },
   created() {
     this._getGoodsData();
+    
   },
   //当dom加载完毕时初始化插件
   mounted() {
+    //延迟20毫秒后再初始化
     setTimeout(() => {
       this._initScroll();
+      this._getGoodsListHeight();
     }, 20);
   },
   methods: {
@@ -68,12 +102,44 @@ export default {
       });
     },
     _initScroll() {
-      this.menuScroll = new BScroll(this.$refs.menuscroll, {});
-      this.goodsScroll = new BScroll(this.$refs.goodsscroll, {});
+      this.menuScroll = new BScroll(this.$refs.menuscroll, {
+        click:true  //是指click为true，否则会阻止点击事件
+      });
+
+      this.goodsScroll = new BScroll(this.$refs.goodsscroll, {
+        probeType:3 //利用插件，设置probeType为3，可以开启监听滚动条的坐标值
+      });
+
+      //监听商品列表的滚动事件
+      this.goodsScroll.on('scroll', (pos) => {
+        //获取Y值。Y可能是小数所以使用Math.round对小数取整
+        //而且向下滚动Y值得到是负值，所以使用Math.abs得到绝对值(正数)
+        this.scrollY = Math.abs(Math.round(pos.y));
+      })
+    },
+    //计算每组商品的高度
+    _getGoodsListHeight(){
+      let foodList = document.querySelectorAll('.food-list-hook'); //获取每个商品列表li元素
+      let height = 0; //设置高度初始为0
+      this.listHeight.push(height); //把初始高度值添加到数组，也就是第一个li的高度是从0开始的
+      for(let i = 0; i<foodList.length; i++){
+        let listHei = foodList[i].clientHeight; //使用clientHeight获取每个li的高度
+        height += listHei //累加每个li的高度
+        this.listHeight.push(height); //把每次循环得到的高度添加到数组中，数组中存放的就是所有li的高度值
+      }
+    },
+    //左侧菜单点击，跳转到相应的商品位置
+    selectMenu(index){
+      let foodList = document.querySelectorAll('.food-list-hook'); //获取每个商品列表li元素
+      let el = foodList[index];
+
+      //使用插件提供的方法跳转到指定元素位置
+      this.goodsScroll.scrollToElement(el,300);
     }
   },
   components: {
-    supportsIco
+    supportsIco,
+    shopcart
   }
 };
 </script>
@@ -99,6 +165,13 @@ export default {
       border-bottom: 1px solid #dddee0;
       padding: 0 0.3rem;
       display: table;
+      &.current{
+        background-color: #fff;
+        font-weight: 700;
+        position: relative;
+        z-index: 10;
+        margin-top: -2px;
+      }
       .menu-text {
         display: table-cell;
         vertical-align: middle;

@@ -21,7 +21,7 @@ export default {};
 .tab {
   display: flex;
   height: 1.0667rem;
-  border-bottom: 0.0133rem solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
   .tab-item{
     flex: 1;
     .font-dpr(14px);

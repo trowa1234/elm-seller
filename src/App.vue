@@ -2,7 +2,8 @@
   <div id="app">
     <m-header :seller="sellerData"></m-header>
     <tab></tab>
-    <router-view/>
+    <!-- 商家的数据是通过层层传递，最后传给goods组件下面的shopcart组件 -->
+    <router-view :seller="sellerData"/>
   </div>
 </template>
 
