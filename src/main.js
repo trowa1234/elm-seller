@@ -17,7 +17,10 @@ new Vue({
   el: '#app',
   router,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+  data: {
+    eventBus: new Vue()
+  }
 
   //render: h => h(App)
 })
