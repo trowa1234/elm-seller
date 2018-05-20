@@ -212,7 +212,7 @@ export default {
   .detail {
     width: 100%;
     height: 100%;
-    z-index: 100;
+    z-index: 200;
     overflow: auto;
     background: rgba(7, 17, 27, 0.8);
     position: fixed;

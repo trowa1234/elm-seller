@@ -224,6 +224,7 @@ export default {
         .font-dpr(14px);
       }
       .food-item {
+        position: relative;
         display: flex;
         position: relative;
         margin: 0.48rem 0.48rem 0 0.48rem;
